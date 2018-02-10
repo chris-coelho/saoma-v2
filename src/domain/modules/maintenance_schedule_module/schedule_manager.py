@@ -23,6 +23,8 @@ class ScheduleManager:
     def get_available_times(self):
         base_times = self.__get_base_times()
         blocked_times = self.__get_blocked_times()
+        if not blocked_times:
+            return base_times
         return [available_time for available_time in base_times if available_time not in blocked_times]
 
     def __get_blocked_times(self):

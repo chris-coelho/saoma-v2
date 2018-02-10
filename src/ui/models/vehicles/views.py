@@ -2,13 +2,17 @@ from flask import Blueprint, request, render_template, redirect, url_for
 
 from src.application.customer_app_service import CustomerAppService
 from src.domain.modules.vehicle_module.vehicle_exceptions import VehicleExceptions
+from src.ui.message_handler import handle_message_error
 
 vehicle_blueprint = Blueprint('vehicles', __name__)
 
 
 @vehicle_blueprint.route('/index/<string:customer_id>')
 def index(customer_id):
-    vehicles_view = CustomerAppService().get_vehicles_view(customer_id)
+    try:
+        vehicles_view = CustomerAppService().get_vehicles_view(customer_id)
+    except VehicleExceptions as e:
+        return handle_message_error(e)
     return render_template('vehicles/index.html', view=vehicles_view)
 
 
@@ -23,7 +27,7 @@ def new_vehicle(owner_id):
             CustomerAppService().new_vehicle(plate, owner_id, model_id, model_year)
             return redirect(url_for('.index', customer_id=owner_id))
         except VehicleExceptions as e:
-            return e.args
+            return handle_message_error(e)
 
     return render_template('vehicles/new_vehicle.html',
                            view=CustomerAppService().get_vehicle_for_crud_view(customer_id=owner_id))
@@ -41,7 +45,7 @@ def upd_vehicle(vehicle_id):
             CustomerAppService().upd_vehicle(plate, owner_id, model_id, model_year, vehicle_id)
             return redirect(url_for('.index', customer_id=owner_id))
         except VehicleExceptions as e:
-            return e.args
+            return handle_message_error(e)
 
     return render_template('vehicles/upd_vehicle.html',
                            view=CustomerAppService().get_vehicle_for_crud_view(vehicle_id=vehicle_id))

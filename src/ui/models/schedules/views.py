@@ -1,14 +1,19 @@
 from flask import Blueprint, request, render_template, redirect, url_for
 
 from src.application.schedule_app_service import ScheduleAppService
-from src.domain.modules.customer_module.customer_exceptions import CustomerNotFoundException
+from src.domain.modules.customer_module.customer_exceptions import CustomerExceptions
+from src.domain.modules.maintenance_schedule_module.schedule_exceptions import ScheduleExceptions
+from src.ui.message_handler import handle_message_error
 
 schedule_blueprint = Blueprint('schedules', __name__)
 
 
 @schedule_blueprint.route('/index')
 def index():
-    schedules = ScheduleAppService().get_schedules_view()
+    try:
+        schedules = ScheduleAppService().get_schedules_view()
+    except ScheduleExceptions as e:
+        return handle_message_error(e)
     return render_template('schedules/index.html', view=schedules)
 
 
@@ -21,10 +26,10 @@ def new_schedule():
             schedule_view = ScheduleAppService().schedule_definition_view(doc_id)
             if schedule_view:
                 return render_template('schedules/new_schedule_step2.html', view=schedule_view)
-        except CustomerNotFoundException(doc_id) as e:
-            return e.args
-        except Exception as e:
-            return e.args
+        except CustomerExceptions as e:
+            return handle_message_error(e)
+        except ScheduleExceptions as e:
+            return handle_message_error(e)
 
     return render_template('schedules/new_schedule_step1.html')
 
@@ -37,8 +42,8 @@ def confirm_schedule():
 
     try:
         ScheduleAppService().schedule_confirmation(vehicle_id, time_scheduled, categories)
-    except Exception as e:
-        return e.args
+    except ScheduleExceptions as e:
+        return handle_message_error(e)
 
     return redirect(url_for('.index'))
 

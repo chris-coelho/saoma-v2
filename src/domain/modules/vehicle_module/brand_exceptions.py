@@ -1,11 +1,13 @@
 
 
-class BrandExceptions(Exception):
-    def __init__(self, *args):
-        super().__init__(*args)
+class BrandExceptions(ValueError):
+    def __init__(self, messages):
+        if not isinstance(messages, list):
+            messages = [messages]
+        super().__init__(messages)
 
 
-class BrandNotFoundException(Exception):
+class BrandNotFoundException(BrandExceptions):
     def __init__(self, _id):
         if _id:
             message = "Marca não encontrada para o Id: {}".format(_id)
@@ -14,6 +16,6 @@ class BrandNotFoundException(Exception):
         super().__init__(message)
 
 
-class BrandAlreadyExistsException(Exception):
+class BrandAlreadyExistsException(BrandExceptions):
     def __init__(self, entity):
         super().__init__("Já existe marca: {}".format(entity))

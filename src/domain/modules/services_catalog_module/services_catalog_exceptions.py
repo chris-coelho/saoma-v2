@@ -1,11 +1,13 @@
 
 
-class ServicesCatalogExceptions(Exception):
-    def __init__(self, *args):
-        super().__init__(*args)
+class ServicesCatalogExceptions(ValueError):
+    def __init__(self, messages):
+        if not isinstance(messages, list):
+            messages = [messages]
+        super().__init__(messages)
 
 
-class ServiceCategoryNotFoundException(Exception):
+class ServiceCategoryNotFoundException(ServicesCatalogExceptions):
     def __init__(self, _id):
         if _id:
             message = "Categoria de Serviço {} não encontrada!".format(_id)

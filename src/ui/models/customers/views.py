@@ -2,13 +2,17 @@ from flask import Blueprint, request, render_template, redirect, url_for
 
 from src.application.customer_app_service import CustomerAppService
 from src.domain.modules.customer_module.customer_exceptions import CustomerExceptions
+from src.ui.message_handler import handle_message_error
 
 customer_blueprint = Blueprint('customers', __name__)
 
 
 @customer_blueprint.route('/index')
 def index():
-    customers = CustomerAppService().get_customers_view()
+    try:
+        customers = CustomerAppService().get_customers_view()
+    except CustomerExceptions as e:
+        return handle_message_error(e)
     return render_template('customers/index.html', view=customers)
 
 
@@ -23,7 +27,7 @@ def new_customer():
             CustomerAppService().new_customer(doc_id, name, email)
             return redirect(url_for('.index'))
         except CustomerExceptions as e:
-            return e.args
+            return handle_message_error(e)
 
     return render_template('customers/new_customer.html')
 
@@ -39,6 +43,6 @@ def upd_customer(customer_id):
             CustomerAppService().upd_customer(doc_id, name, email, customer_id)
             return redirect(url_for('.index'))
         except CustomerExceptions as e:
-            return e.args
+            return handle_message_error(e)
 
     return render_template('customers/upd_customer.html', view=CustomerAppService().get_customer(customer_id))

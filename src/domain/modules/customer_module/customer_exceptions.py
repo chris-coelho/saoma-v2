@@ -1,11 +1,13 @@
 
 
-class CustomerExceptions(Exception):
-    def __init__(self, *args):
-        super().__init__(*args)
+class CustomerExceptions(ValueError):
+    def __init__(self, messages):
+        if not isinstance(messages, list):
+            messages = [messages]
+        super().__init__(messages)
 
 
-class CustomerNotFoundException(Exception):
+class CustomerNotFoundException(CustomerExceptions):
     def __init__(self, id):
         if id:
             message = "Cliente {} não encontrado!".format(id)
@@ -14,6 +16,6 @@ class CustomerNotFoundException(Exception):
         super().__init__(message)
 
 
-class CustomerAlreadyExistsException(Exception):
+class CustomerAlreadyExistsException(CustomerExceptions):
     def __init__(self, entity):
         super().__init__("Já existe cliente {}".format(entity))

@@ -34,13 +34,13 @@ class CustomerFactory(FactoryBase):
             messages.append("Email obrigatório.")
 
         if entity.name and len(entity.name) < 6:
-            messages.append("Nome muito curto.")
+            messages.append("Nome {} - muito curto.".format(entity.name))
 
         if not DocIdUtil.validate_cpf(entity.doc_id):
-            messages.append("CPF inválido.")
+            messages.append("CPF {} inválido.".format(entity.doc_id))
 
         if not EmailUtil.is_valid(entity.email):
-            messages.append("E-mail inválido.")
+            messages.append("E-mail {} inválido.".format(entity.email))
 
         if len(messages) == 0:
             return True
