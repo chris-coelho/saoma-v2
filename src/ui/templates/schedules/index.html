@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="page-header">
+        <h1>Agendamentos <small>todos confirmados a partir de hoje</small></h1>
+    </div>
+    <div class="list-group">
+        {% for schedule in view %}
+            <a href="#" class="list-group-item">
+                <h4 class="list-group-item-heading">
+                    <strong>{{ schedule.time_scheduled.strftime('%d.%m') }}</strong>.<small>{{ schedule.time_scheduled.strftime('%Y') }}</small>
+                    <small> às </small><strong>{{ schedule.time_scheduled.strftime('%Hh%M') }}</strong>
+                    <small>para o</small> {{ schedule.vehicle.model.brand.name }}: {{ schedule.vehicle.model.name }}
+                    <small>placas</small> {{ schedule.vehicle.plate }}</h4>
+
+                <p class="list-group-text">
+                    Serviços: <strong>{{ schedule.services_name }}</strong><br />
+                    Proprietário: <strong>{{ schedule.vehicle.owner.name }}</strong></p>
+            </a>
+        {% endfor %}
+    </div>
+    <a class="btn btn-success" href="{{ url_for('schedules.new_schedule') }}">
+        <span class="glyphicon glyphicon-plus"></span> Novo agendamento</a>
+{% endblock %}

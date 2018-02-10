@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+    <h1>Automóveis <small>alteração do automóvel do cliente <strong>{{ view.owner.name  }}</strong></small></h1>
+</div>
+<div class="form-size">
+    <form id="new_vehicle_form" method="post">
+        <input name="owner_id" value="{{ view.owner._id }}" hidden>
+        <div class="form-group">
+            <label for="plate">Placa</label>
+            <input type="text" class="form-control" id="plate" name="plate" placeholder="ABC1234"
+                   value="{{ view.vehicle.plate }}">
+        </div>
+
+        <div class="form-group">
+            <label for="models">Selecione uma marca: modelo</label>
+            <select class="form-control" id="models" name="models">
+                {% for model in view.models %}
+                    {% if model._id == view.vehicle.model._id %}
+                        <option value="{{ model._id }}" selected>{{ model.brand.name }}: {{ model.name }}</option>
+                    {% else %}
+                        <option value="{{ model._id }}">{{ model.brand.name }}: {{ model.name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="model_year">Ano modelo</label>
+            <input type="text" class="form-control" id="model_year" name="model_year"
+                   placeholder="ano modelo do automóvel" value="{{ view.vehicle.model_year }}">
+        </div>
+
+        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Confirmar</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+    <h1>Clientes <small>alteração de cadastro</small></h1>
+</div>
+<div class="form-size">
+    <form id="upd_customer_form" method="post">
+        <div class="form-group">
+            <label for="doc_id">CPF</label>
+            <input type="text" class="form-control" id="doc_id" name="doc_id" value="{{ view.doc_id }}"
+                   aria-describedby="doc-id-help" placeholder="Informe o CPF" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="name">Nome</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ view.name }}"
+                   placeholder="nome completo..">
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="text" class="form-control" id="email" name="email" value="{{ view.email }}"
+                   placeholder="cliente@dominio.com...">
+        </div>
+
+        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Confirmar</button>
+    </form>
+</div>
+{% endblock %}

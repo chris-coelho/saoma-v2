@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="page-header">
+        <h1>Automóveis <small>do cliente <strong>{{ view.owner.name }}</strong></small></h1>
+    </div>
+    <div class="list-group">
+        {% for vehicle in view.vehicles %}
+            <a href="{{ url_for('vehicles.upd_vehicle', vehicle_id=vehicle._id) }}" class="list-group-item">
+                <h4 class="list-group-item-heading">{{ vehicle.model.brand.name }}: {{ vehicle.model.name }}</h4>
+                <p class="list-group-text">Placas: <strong>{{ vehicle.plate }}</strong><br />
+                    Ano modelo: <strong>{{ vehicle.model_year }}</strong></p>
+            </a>
+        {% endfor %}
+    </div>
+    <a class="btn btn-success" href="{{ url_for('vehicles.new_vehicle', owner_id=view.owner._id) }}">
+        <span class="glyphicon glyphicon-plus"></span> Novo automóvel</a>
+{% endblock %}

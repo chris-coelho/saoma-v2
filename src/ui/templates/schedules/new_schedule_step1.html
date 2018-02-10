@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+    <h1>Agendamento <small>para atendimento com hora marcada - Passo 1/2</small></h1>
+</div>
+<div class="form-size">
+    <form id="schedule_form" action="{{ url_for('schedules.new_schedule') }}" method="post">
+        <div class="form-group">
+            <label for="doc_id">CPF</label>
+            <input type="text" class="form-control" id="doc_id" name="doc_id" aria-describedby="doc-id-help"
+                   placeholder="Informe seu CPF">
+            <small id="doc-id-help" class="form-text text-muted">Digite apenas números.</small>
+        </div>
+        <button type="submit" class="btn btn-primary">Avançar >></button>
+    </form>
+</div>
+{% endblock %}
