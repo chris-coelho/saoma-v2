@@ -2,5 +2,5 @@
 
 DEBUG = True
 ADMINS = frozenset({
-    "admin@test.com"
+    "cristovao3g@gmail.com"
 })
