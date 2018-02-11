@@ -1,5 +1,7 @@
 import json
 
+import os
+
 from src.infra.data._mongo.mongo_db_context import MongoDbContext
 
 
@@ -26,9 +28,17 @@ class SaomaDbContext:
     def __set_db_configuration():
         config_file = '../../db/database.cfg'  # from UI layer
         #config_file = 'db/database.cfg'  # from root
+
         with open(config_file, 'r') as f:
             cfg = json.load(f)
-            SaomaDbContext.USERNAME = cfg['username']
-            SaomaDbContext.PASSWORD = cfg['password']
-            SaomaDbContext.HOST = cfg['host'].format(SaomaDbContext.USERNAME, SaomaDbContext.PASSWORD)
-            SaomaDbContext.DATABASE_NAME = cfg['database_name']
+
+            if not cfg['username'] or len(cfg['username']) == 0:
+                # Remote Server
+                SaomaDbContext.HOST = os.environ.get("MONGOLAB_URI")
+                SaomaDbContext.DATABASE_NAME = cfg['database_name']
+            else:
+                SaomaDbContext.USERNAME = cfg['username']
+                SaomaDbContext.PASSWORD = cfg['password']
+                SaomaDbContext.HOST = cfg['host'].format(SaomaDbContext.USERNAME, SaomaDbContext.PASSWORD)
+                SaomaDbContext.DATABASE_NAME = cfg['database_name']
+
