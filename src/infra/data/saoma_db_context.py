@@ -34,7 +34,7 @@ class SaomaDbContext:
 
             if not cfg['username'] or len(cfg['username']) == 0:
                 # Remote Server
-                SaomaDbContext.HOST = os.environ.get("MONGOLAB_URI")
+                SaomaDbContext.HOST = os.environ.get("MONGODB_URI")
             else:
                 SaomaDbContext.USERNAME = cfg['username']
                 SaomaDbContext.PASSWORD = cfg['password']
