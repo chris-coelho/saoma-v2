@@ -4,7 +4,7 @@ import pymongo
 class MongoDbContext:
 
     def get_context(self, host, database_name, username, password):
-        if not username:
+        if not username or len(username) == 0:
             client = pymongo.MongoClient(host)
             context = client.get_default_database()
         else:
