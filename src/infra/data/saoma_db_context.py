@@ -26,18 +26,20 @@ class SaomaDbContext:
 
     @staticmethod
     def __set_db_configuration():
-        config_file = '../../db/database.cfg'  # from UI layer
-        #config_file = 'db/database.cfg'  # from root
+        SaomaDbContext.HOST = os.environ.get("MONGODB_URI")
 
-        with open(config_file, 'r') as f:
-            cfg = json.load(f)
-
-            if not cfg['username'] or len(cfg['username']) == 0:
-                # Remote Server
-                SaomaDbContext.HOST = os.environ.get("MONGODB_URI")
-            else:
-                SaomaDbContext.USERNAME = cfg['username']
-                SaomaDbContext.PASSWORD = cfg['password']
-                SaomaDbContext.HOST = cfg['host'].format(SaomaDbContext.USERNAME, SaomaDbContext.PASSWORD)
-                SaomaDbContext.DATABASE_NAME = cfg['database_name']
+        # config_file = '../../db/database.cfg'  # from UI layer
+        # #config_file = 'db/database.cfg'  # from root
+        #
+        # with open(config_file, 'r') as f:
+        #     cfg = json.load(f)
+        #
+        #     if not cfg['username'] or len(cfg['username']) == 0:
+        #         # Remote Server
+        #         SaomaDbContext.HOST = os.environ.get("MONGODB_URI")
+        #     else:
+        #         SaomaDbContext.USERNAME = cfg['username']
+        #         SaomaDbContext.PASSWORD = cfg['password']
+        #         SaomaDbContext.HOST = cfg['host'].format(SaomaDbContext.USERNAME, SaomaDbContext.PASSWORD)
+        #         SaomaDbContext.DATABASE_NAME = cfg['database_name']
 
