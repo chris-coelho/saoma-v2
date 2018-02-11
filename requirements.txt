@@ -3,3 +3,4 @@ psycopg2
 Flask==0.10.1
 beautifulsoup4==4.6.0
 Flask-RESTFUL==0.3.6
+uwsgi
