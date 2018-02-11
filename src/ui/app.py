@@ -5,7 +5,7 @@ from src.ui.models.schedules.views import schedule_blueprint
 from src.ui.models.vehicles.views import vehicle_blueprint
 
 app = Flask(__name__)
-app.config.from_object('config')
+app.config.from_pyfile('config.py')
 
 
 @app.route("/")
