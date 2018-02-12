@@ -34,6 +34,18 @@ def new_schedule():
     return render_template('schedules/new_schedule_step1.html')
 
 
+@schedule_blueprint.route('/new/<string:doc_id>')
+def new_schedule_with_doc_id(doc_id):
+    try:
+        schedule_view = ScheduleAppService().schedule_definition_view(doc_id)
+        if schedule_view:
+            return render_template('schedules/new_schedule_step2.html', view=schedule_view)
+    except CustomerExceptions as e:
+        return handle_message_error(e)
+    except ScheduleExceptions as e:
+        return handle_message_error(e)
+
+
 @schedule_blueprint.route('/confirm', methods=['POST'])
 def confirm_schedule():
     vehicle_id = request.form.get('vehicles')

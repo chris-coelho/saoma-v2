@@ -12,6 +12,9 @@
                 <a class="btn btn-primary"
                    href="{{ url_for('vehicles.index', customer_id=customer._id) }}"> Automóveis
                     <span class="badge badge-light">{{ customer.number_of_vehicles }}</span></a>
+                <a class="btn btn-success"
+                   href="{{ url_for('schedules.new_schedule_with_doc_id', doc_id=customer.doc_id) }}">
+                    Agendar Atendimento</a>
                 <p></p>
             </a>
         {% endfor %}

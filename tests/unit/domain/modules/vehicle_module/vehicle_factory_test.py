@@ -1,5 +1,7 @@
 from unittest import TestCase
 
+import datetime
+
 from src.domain.modules.customer_module.customer import Customer
 from src.domain.modules.vehicle_module.brand import Brand
 from src.domain.modules.vehicle_module.model import Model
@@ -78,6 +80,26 @@ class VehicleFactoryTest(TestCase):
                                   2018)
             e.msg = "invalid plate - expected: None"
 
+        with self.assertRaises(VehicleExceptions) as e:
+            VehicleFactory.create('AAB14',
+                                  Customer('58355843690', 'Marcia Garcia', 'marcia.garcia@test.com',
+                                           '76e67f3c40024dfd94bdb71976022839'),
+                                  Model('HRV EX 1.8', Brand('Honda',
+                                                            'e29ed583b9a246a8a7f1596593bb7888'),
+                                        'b49aa1cb2082476bb3b6af601ec3ef9b'),
+                                  2018)
+            e.msg = "invalid plate - expected: a short plate"
+
+        with self.assertRaises(VehicleExceptions) as e:
+            VehicleFactory.create('AB234',
+                                  Customer('58355843690', 'Marcia Garcia', 'marcia.garcia@test.com',
+                                           '76e67f3c40024dfd94bdb71976022839'),
+                                  Model('HRV EX 1.8', Brand('Honda',
+                                                            'e29ed583b9a246a8a7f1596593bb7888'),
+                                        'b49aa1cb2082476bb3b6af601ec3ef9b'),
+                                  2018)
+            e.msg = "invalid plate - expected: a plate that no matching with format AAA1111 - 3 letters and 4 numbers"
+
     def test_create_invalid_model(self):
         with self.assertRaises(VehicleExceptions) as e:
             VehicleFactory.create('ABC1234',
@@ -86,3 +108,61 @@ class VehicleFactoryTest(TestCase):
                                   None,
                                   2018)
             e.msg = "invalid model - expected: None"
+
+    def test_create_valid_model_year(self):
+        vehicle_year_none = VehicleFactory.create('ABC1234',
+                                                  Customer('58355843690', 'Marcia Garcia', 'marcia.garcia@test.com',
+                                                           '76e67f3c40024dfd94bdb71976022839'),
+                                                  Model('HRV EX 1.8', Brand('Honda',
+                                                                            'e29ed583b9a246a8a7f1596593bb7888'),
+                                                        'b49aa1cb2082476bb3b6af601ec3ef9b'),
+                                                  None)
+        vehicle_next_year = VehicleFactory.create('ABC1234',
+                                                  Customer('58355843690', 'Marcia Garcia', 'marcia.garcia@test.com',
+                                                           '76e67f3c40024dfd94bdb71976022839'),
+                                                  Model('HRV EX 1.8', Brand('Honda',
+                                                                            'e29ed583b9a246a8a7f1596593bb7888'),
+                                                        'b49aa1cb2082476bb3b6af601ec3ef9b'),
+                                                  datetime.date.today().year + 1)
+        vehicle_old = VehicleFactory.create('ABC1234',
+                                            Customer('58355843690', 'Marcia Garcia', 'marcia.garcia@test.com',
+                                                     '76e67f3c40024dfd94bdb71976022839'),
+                                            Model('HRV EX 1.8', Brand('Honda', 'e29ed583b9a246a8a7f1596593bb7888'),
+                                                  'b49aa1cb2082476bb3b6af601ec3ef9b'),
+                                            datetime.date.today().year - 5)  # 5 years old
+        self.assertIsInstance(vehicle_year_none, Vehicle)
+        self.assertIsInstance(vehicle_next_year, Vehicle)
+        self.assertIsInstance(vehicle_old, Vehicle)
+
+    def test_create_model_year_greater_than_limit(self):
+        with self.assertRaises(VehicleExceptions) as e:
+            VehicleFactory.create('ABC1234',
+                                  Customer('58355843690', 'Marcia Garcia', 'marcia.garcia@test.com',
+                                           '76e67f3c40024dfd94bdb71976022839'),
+                                  Model('HRV EX 1.8', Brand('Honda',
+                                                            'e29ed583b9a246a8a7f1596593bb7888'),
+                                        'b49aa1cb2082476bb3b6af601ec3ef9b'),
+                                  2020)
+            e.msg = "invalid model year - expected: > current year + 1"
+
+    def test_create_model_year_less_than_limit(self):
+        with self.assertRaises(VehicleExceptions) as e:
+            VehicleFactory.create('ABC1234',
+                                  Customer('58355843690', 'Marcia Garcia', 'marcia.garcia@test.com',
+                                           '76e67f3c40024dfd94bdb71976022839'),
+                                  Model('HRV EX 1.8', Brand('Honda',
+                                                            'e29ed583b9a246a8a7f1596593bb7888'),
+                                        'b49aa1cb2082476bb3b6af601ec3ef9b'),
+                                  1899)
+            e.msg = "invalid model year - expected: a very old year"
+
+    def test_create_model_year_as_string(self):
+        with self.assertRaises(VehicleExceptions) as e:
+            VehicleFactory.create('ABC1234',
+                                  Customer('58355843690', 'Marcia Garcia', 'marcia.garcia@test.com',
+                                           '76e67f3c40024dfd94bdb71976022839'),
+                                  Model('HRV EX 1.8', Brand('Honda',
+                                                            'e29ed583b9a246a8a7f1596593bb7888'),
+                                        'b49aa1cb2082476bb3b6af601ec3ef9b'),
+                                  'new')
+            e.msg = "invalid model year - expected: a string"
