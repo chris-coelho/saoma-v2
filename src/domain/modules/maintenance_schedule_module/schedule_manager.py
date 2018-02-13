@@ -21,16 +21,14 @@ class ScheduleManager:
         self._schedule_repo = schedule_repo
 
     def get_available_times(self):
-        base_times = self.__get_base_times()
-        blocked_times = self.__get_blocked_times()
+        base_times = self.get_base_times()
+        blocked_times = self._schedule_repo.get_blocked_times(ScheduleManager.START_TIME,
+                                                              ScheduleManager.END_TIME)
         if not blocked_times:
             return base_times
         return [available_time for available_time in base_times if available_time not in blocked_times]
 
-    def __get_blocked_times(self):
-        return self._schedule_repo.get_blocked_times(ScheduleManager.START_TIME, ScheduleManager.END_TIME)
-
-    def __get_base_times(self):
+    def get_base_times(self):
         base_times = []
         time_schedule = ScheduleManager.START_TIME
         elapsed_days = 0
@@ -42,3 +40,4 @@ class ScheduleManager:
                 elapsed_days += 1
                 time_schedule = ScheduleManager.START_TIME + datetime.timedelta(days=elapsed_days)
         return base_times
+

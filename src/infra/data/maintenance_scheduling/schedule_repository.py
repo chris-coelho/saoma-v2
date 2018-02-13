@@ -21,7 +21,7 @@ class ScheduleRepository(SaomaRepository):
 
     def get_blocked_times(self, start_date, end_date):
         data = super().search(lambda x: start_date <= x['time_scheduled'] <= end_date)
-        return data if data else None
+        return [d['time_scheduled'] for d in data] if data else None
 
     def add(self, entity):
         if entity.service_categories:
